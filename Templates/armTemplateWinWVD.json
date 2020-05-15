@@ -1,0 +1,137 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "imageTemplateName": {
+        "type": "string"
+        },
+        "api-version": {
+          "type": "string"
+        },
+        "svclocation": {
+            "type": "string"
+        }
+    },
+    
+    "variables": {
+    },
+
+
+    "resources": [
+      {
+        "name": "[parameters('imageTemplateName')]",
+        "type": "Microsoft.VirtualMachineImages/imageTemplates",
+        "apiVersion": "[parameters('api-version')]",
+        "location": "[parameters('svclocation')]",
+        "dependsOn": [],
+        "tags": {
+            "imagebuilderTemplate": "AzureImageBuilderSIG",
+            "userIdentity": "enabled"
+                },
+            "identity": {
+                "type": "UserAssigned",
+                        "userAssignedIdentities": {
+                        "/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourcegroups/VSE_WVD_Images2/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIBuilderWVD1": {}
+                            
+                    }
+                    },
+        
+        "properties": {
+            "buildTimeoutInMinutes" : 200,
+
+            "vmProfile": 
+                    {
+                    "vmSize": "Standard_D1_v2",
+                    "osDiskSizeGB": 127
+                    },
+        
+            "source": {
+                "type": "PlatformImage",
+                    "publisher": "MicrosoftWindowsDesktop",
+                    "offer": "windows-10",
+                    "sku": "19h1-evd",
+                    "version": "latest"
+                
+            },
+            "customize": [
+					{
+                    "type": "PowerShell",
+                    "name": "0-prepimagefolders",
+                    "inline": [
+                        "New-Item -ItemType Directory -Path 'C:\\Unzipped' -Force",
+                        "New-Item -ItemType Directory -Path 'C:\\Logs' -Force",
+                        "New-Item -ItemType Directory -Path 'C:\\Install' -Force"
+                    ]
+					},
+					{
+                        "type": "File",
+                        "name": "1-downloadFslogix",
+                        "sourceUri": "https://vseinfraimages.blob.core.windows.net/images/FSLogixAppsSetup.exe",
+                        "destination":"c:\\Install\\FSLogixAppsSetup.exe"
+                    },
+					{
+                        "type": "PowerShell",
+                        "name": "1A-installFslogix",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/FSLogixInstall.ps1"
+                    },
+					{
+                    "type": "PowerShell",
+                    "name": "3-install-office365proplus-postinstall-tweaks",
+                    "inline": [
+                        "# Mount the default user registry hive",
+                        "reg load HKU\\TempDefault \"C:\\Users\\Default\\NTUSER.DAT\"",
+                        "# Must be executed with default registry hive mounted",
+                        "reg add HKU\\TempDefault\\SOFTWARE\\Policies\\Microsoft\\office\\16.0\\common /v InsiderSlabBehavior /t REG_DWORD /d 2 /f",
+                        "# Set Outlook's Cached Exchange Mode behavior (Must be executed with default registry hive mounted)",
+                        "reg add \"HKU\\TempDefault\\software\\policies\\microsoft\\office\\16.0\\outlook\\cached mode\" /v enable /t REG_DWORD /d 1 /f",
+                        "reg add \"HKU\\TempDefault\\software\\policies\\microsoft\\office\\16.0\\outlook\\cached mode\" /v syncwindowsetting /t REG_DWORD /d 1 /f",
+                        "reg add \"HKU\\TempDefault\\software\\policies\\microsoft\\office\\16.0\\outlook\\cached mode\" /v CalendarSyncWindowSetting /t REG_DWORD /d 1 /f",
+                        "reg add \"HKU\\TempDefault\\software\\policies\\microsoft\\office\\16.0\\outlook\\cached mode\" /v CalendarSyncWindowSettingMonths  /t REG_DWORD /d 1 /f",
+                        "# Unmount the default user registry hive",
+                        "reg unload HKU\\TempDefault",
+                        "# Set the Office Update UI behavior",
+                        "reg add HKLM\\SOFTWARE\\Policies\\Microsoft\\office\\16.0\\common\\officeupdate /v hideupdatenotifications /t REG_DWORD /d 1 /f",
+                        "reg add HKLM\\SOFTWARE\\Policies\\Microsoft\\office\\16.0\\common\\officeupdate /v hideenabledisableupdates /t REG_DWORD /d 1 /f"
+                    ]
+					},
+					{
+                        "type": "WindowsUpdate",
+                        "searchCriteria": "IsInstalled=0",
+                        "filters": [
+                            "exclude:$_.Title -like '*Preview*'",
+                            "include:$true"
+                                    ],
+                        "updateLimit": 40
+                    }
+
+            ],
+            "distribute": 
+            [
+                {   
+                    "type": "SharedImage",
+                    "galleryImageId": "/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images2/providers/Microsoft.Compute/galleries/myaibwvdsig01/images/winWVDimages",
+                    "runOutputName": "winclientR02",
+                    "artifactTags": {
+                        "source": "azureVmImageBuilder",
+                        "baseosimg": "windows10"
+                    },
+                    "replicationRegions": [
+                      "eastus2",
+                      "northeurope"
+                    ]
+                }
+            ]
+            }
+        }
+
+    
+    ]
+}    
+
+
+
+
+
+
+
+

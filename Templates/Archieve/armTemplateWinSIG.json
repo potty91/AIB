@@ -104,7 +104,7 @@
                     },
                     "replicationRegions": [
                       "eastus2",
-                      "eastus"
+                      "northeurope"
                     ]
                 }
             ]
