@@ -23,7 +23,6 @@ steps:
     baseImage: 'MicrosoftWindowsDesktop:Windows-10:19h1-evd:windows'
     provisioner: 'powershell'
     windowsUpdateProvisioner: true
-    packagePath: 'https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts'
     storageAccountName: 'vseinfraimages'
     distributeType: 'sig'
     galleryImageId: '/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images2/providers/Microsoft.Compute/galleries/myaibwvdsig01/images/winWVDimages'
