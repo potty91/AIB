@@ -87,7 +87,7 @@ New-AzGalleryImageDefinition -GalleryName $sigGalleryName -ResourceGroupName $im
 
 
 #$templateUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/quickquickstarts/1_Creating_a_Custom_Win_Shared_Image_Gallery_Image/armTemplateWinSIG.json"
-$templateFilePath = "armTemplateWinWVDv4SIG.json"
+$templateFilePath = "armTemplateWinWVD.json"
 
 Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 

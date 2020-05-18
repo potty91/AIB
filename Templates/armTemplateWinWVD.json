@@ -74,6 +74,23 @@
                         "name": "1A-installFslogix",
                         "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/FSLogixInstall.ps1"
                     },
+                    {
+                        "type": "File",
+                        "name": "2-downloadODT",
+                        "sourceUri": "https://vseinfraimages.blob.core.windows.net/images/setup.exe",
+                        "destination":"c:\\Install\\setup.exe"
+                    },
+                    {
+                        "type": "File",
+                        "name": "2A-downloadOfficeConfig",
+                        "sourceUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/Configuration.xml",
+                        "destination":"c:\\Install\\configuration.xml"
+                    },
+					{
+                        "type": "PowerShell",
+                        "name": "2B-Install",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/OfficeInstall.ps1"
+                    },
 					{
                     "type": "PowerShell",
                     "name": "3-install-office365proplus-postinstall-tweaks",
