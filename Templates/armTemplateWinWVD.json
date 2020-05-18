@@ -93,7 +93,7 @@
                     },
 					{
                     "type": "PowerShell",
-                    "name": "3-install-office365proplus-postinstall-tweaks",
+                    "name": "2C-install-office365proplus-postinstall-tweaks",
                     "inline": [
                         "# Mount the default user registry hive",
                         "reg load HKU\\TempDefault \"C:\\Users\\Default\\NTUSER.DAT\"",
@@ -111,6 +111,36 @@
                         "reg add HKLM\\SOFTWARE\\Policies\\Microsoft\\office\\16.0\\common\\officeupdate /v hideenabledisableupdates /t REG_DWORD /d 1 /f"
                     ]
 					},
+                    {
+                        "type": "File",
+                        "name": "3-downloadOneDrive",
+                        "sourceUri": "https://vseinfraimages.blob.core.windows.net/images/OneDriveSetup.exe",
+                        "destination":"c:\\Install\\OneDriveSetup.exe"
+                    },
+					{
+                        "type": "PowerShell",
+                        "name": "3A-installOneDrive",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/OneDriveInstall.ps1"
+                    },
+                     {
+                        "type": "File",
+                        "name": "4-downloadTeams",
+                        "sourceUri": "https://vseinfraimages.blob.core.windows.net/images/Teams_windows_x64.msi",
+                        "destination":"c:\\Install\\Teams_windows_x64.msi"
+                    },
+                    {
+                    "type": "PowerShell",
+                    "name": "4A-EnableTeams",
+                    "inline": [
+                        "# Allow Teams WVD",
+                        " reg add HKLM\\SOFTWARE\\Microsoft\\Teams /v IsWVDEnvironment /t REG_DWORD /d 1 /f"
+                    ]
+					},
+					{
+                        "type": "PowerShell",
+                        "name": "4B-installTeams",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/TeamsInstall.ps1"
+                    },
 					{
                         "type": "WindowsUpdate",
                         "searchCriteria": "IsInstalled=0",
@@ -130,7 +160,8 @@
                     "runOutputName": "winclientR02",
                     "artifactTags": {
                         "source": "azureVmImageBuilder",
-                        "baseosimg": "windows10"
+                        "baseosimg": "windows10",
+                        "FeatureUpdate": "1909"
                     },
                     "replicationRegions": [
                       "eastus2",
