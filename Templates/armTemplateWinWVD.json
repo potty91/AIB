@@ -122,6 +122,11 @@
                         "name": "3A-installOneDrive",
                         "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/OneDriveInstall.ps1"
                     },
+                    {
+                        "type": "PowerShell",
+                        "name": "4-DownloadTeams",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/DownloadTeams.ps1"
+                    },
                 	{
                         "type": "WindowsUpdate",
                         "searchCriteria": "IsInstalled=0",
