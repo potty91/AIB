@@ -1,19 +1,15 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
-
-pool:
-  vmImage: 'ubuntu-latest'
-
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: AzureImageBuilder.devOps-task-for-azure-image-builder.custom-build-release-task.AzureImageBuilderTask@1
+  displayName: 'Azure VM Image Builder Task'
+  inputs:
+    managedIdentity: '/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIBuilderTemp'
+    imageSource: marketplace
+    baseImage: 'MicrosoftWindowsDesktop:Windows-10:19h1-evd'
+    provisioner: powershell
+    windowsUpdateProvisioner: true
+    distributeType: sig
+    galleryImageId: '/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images/providers/Microsoft.Compute/galleries/myaibsig01/images/winSvrimages'
+    replicationRegions: 'eastus2,northeurope'
+    ibSubscription: 'Visual Studio Enterprise(43559797-46d3-45a2-bc18-d03ced80f12b)'
+    ibAzureResourceGroup: 'VSE_WVD_Images'
+    ibLocation: eastus2
