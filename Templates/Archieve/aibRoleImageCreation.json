@@ -1,5 +1,5 @@
 {
-    "Name": "Image Builder Def WVD1591399136.7629",
+    "Name": "Image Builder Def WVD1591401580.79239",
     "IsCustom": true,
     "Description": "Image Builder access to create resources for the image build, you should delete or split out as appropriate",
     "Actions": [
@@ -16,7 +16,7 @@
   
     ],
     "AssignableScopes": [
-      "/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images2"
+      "/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images3"
     ]
   }
 
