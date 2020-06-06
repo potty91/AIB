@@ -127,6 +127,19 @@
                         "name": "4-DownloadTeams",
                         "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/DownloadTeams.ps1"
                     },
+                    {
+                        "type": "PowerShell",
+                        "name": "4A-EnableTeams",
+                        "inline": [
+                            "# Allow Teams WVD",
+                            "reg add HKLM\\SOFTWARE\\Microsoft\\Teams /v IsWVDEnvironment /t REG_DWORD /d 1 /f"
+                        ]
+                        },
+                    {
+                        "type": "PowerShell",
+                        "name": "4B-installTeams",
+                        "scriptUri": "https://raw.githubusercontent.com/potty91/AIB/master/buildArtifacts/TeamsInstall.ps1"
+                    },
                 	{
                         "type": "WindowsUpdate",
                         "searchCriteria": "IsInstalled=0",
