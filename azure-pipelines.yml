@@ -7,6 +7,9 @@ steps:
     baseImage: 'MicrosoftWindowsDesktop:Windows-10:19h1-evd'
     provisioner: powershell
     windowsUpdateProvisioner: true
+    packagePath: '$(System.DefaultWorkingDirectory)/_potty91_AIB/buildArtifacts'
+    inlineScript: '& ''c:\buildArtifacts\DownloadTeamsAIB.ps1'''
+    storageAccountName: vseinfraimages
     distributeType: sig
     galleryImageId: '/subscriptions/43559797-46d3-45a2-bc18-d03ced80f12b/resourceGroups/VSE_WVD_Images/providers/Microsoft.Compute/galleries/myaibsig01/images/winSvrimages'
     replicationRegions: 'eastus2,northeurope'
