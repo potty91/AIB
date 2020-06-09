@@ -24,7 +24,18 @@
         "apiVersion": "[parameters('api-version')]",
         "location": "[parameters('svclocation')]",
         "dependsOn": [],
-        "properties": {
+        "tags": {
+            "imagebuilderTemplate": "AzureImageBuilderSIG",
+            "userIdentity": "enabled"
+                },
+            "identity": {
+                "type": "UserAssigned",
+                        "userAssignedIdentities": {
+                        "/subscriptions/861d193b-7943-44fa-bb58-f0763859b67a/resourceGroups/WVD-Images-RG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIBuilderWVD1": {}
+                            
+                    }
+                    },
+	"properties": {
             "buildTimeoutInMinutes" : 100,
 	    "vmProfile":    
             {
@@ -49,7 +60,7 @@
                     },
                     "replicationRegions": [
                       "EastUS",
-                      "<region2>"
+                      "northeurope"
                     ]
                 }
             ]
