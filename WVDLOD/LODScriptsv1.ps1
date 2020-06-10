@@ -55,7 +55,9 @@ $SkuName="19h2-evd"
 # create resource group
 New-AzResourceGroup -Name $imageResourceGroup -Location $location
 
-
+#################################################################################################################################################################################
+# Start here if you have completed Exercise 1:
+#################################################################################################################################################################################
 #setup role def names, these need to be unique
 $timeInt=$(get-date -UFormat "%s")
 $imageRoleDefName="Image Builder Def WVD"+$timeInt
@@ -90,11 +92,16 @@ Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPa
 # create role definition
 New-AzRoleDefinition -InputFile $aibRoleImageCreationPath
 
+
+#$imageRoleDefName ="aibIdentity1591690145.47891"
+
+
 # grant role definition to image builder service principal
 New-AzRoleAssignment -ObjectId $idenityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 
 
+#################################################################################################################################################################################
 
 # Shared Image Gallery properties
 $sigGalleryName= "WVDSIG"
@@ -142,26 +149,6 @@ Invoke-WebRequest -Uri $templateUrl -OutFile $templateFilePath -UseBasicParsing
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$idenityNameResourceId) | Set-Content -Path $templateFilePath
-
-
-$aibRoleImageCreationUrl="https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json"
-$aibRoleImageCreationPath = "aibRoleImageCreation.json"
-
-# download config
-Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing
-
-((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $aibRoleImageCreationPath
-((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath
-((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath
-
-# create role definition
-New-AzRoleDefinition -InputFile  C:\temp\aibRoleImageCreation.json
-
-
-$imageRoleDefName ="aibIdentity1591690145.47891"
-
-# grant role definition to image builder service principal
-New-AzRoleAssignment -ObjectId $idenityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 
 
